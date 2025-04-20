@@ -5,5 +5,21 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="RIS.Main.Views.AuthorizeWindow"
         Title="AuthorizeWindow">
-    Welcome to Avalonia!
+    
+    <StackPanel Margin="20" Spacing="10">
+        <TextBlock Text="Вход в систему" FontSize="16" HorizontalAlignment="Center"/>
+        
+        <TextBox x:Name="LoginTextBox" Watermark="Логин"/>
+        <TextBox x:Name="PasswordTextBox" Watermark="Пароль" PasswordChar="*"/>
+        
+        <StackPanel x:Name="ChangePasswordPanel" Spacing="10" IsVisible="False">
+            <TextBox x:Name="NewPasswordTextBox" Watermark="Новый пароль" PasswordChar="*"/>
+            <TextBox x:Name="ConfirmPasswordTextBox" Watermark="Подтвердите пароль" PasswordChar="*"/>
+            <Button x:Name="ChangePasswordButton" Content="Сменить пароль"/>
+        </StackPanel>
+        
+        <Button x:Name="LoginButton" Content="Войти"/>
+        
+        <TextBlock x:Name="ErrorMessageText" Foreground="Red" TextWrapping="Wrap"/>
+    </StackPanel>
 </Window>
