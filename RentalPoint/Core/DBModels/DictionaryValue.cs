@@ -13,6 +13,8 @@ public class DictionaryValue : BaseIdEntity
     /// </summary>
     [Required]
     public Dictionary Dictionary { get; set; } = null!;
+    
+    public string DictionaryId { get; set; }
 
     /// <summary>
     ///     Значение справочника.

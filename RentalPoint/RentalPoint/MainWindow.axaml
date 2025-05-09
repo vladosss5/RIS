@@ -5,7 +5,5 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="RentalPoint.MainWindow"
         Title="RentalPoint">
-    <StackPanel>
-        <Button Content="Кнопка" Click="Button_OnClick"/>
-    </StackPanel>
+    Welcome to Avalonia!
 </Window>

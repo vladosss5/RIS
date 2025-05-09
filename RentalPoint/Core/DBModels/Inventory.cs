@@ -19,4 +19,6 @@ public class Inventory : BaseIdEntity
     ///     Тип инвентаря.
     /// </summary>
     public DictionaryValue Type { get; set; } = null!;
+    
+    public string TypeId { get; set; }
 }

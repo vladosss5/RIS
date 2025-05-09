@@ -15,6 +15,8 @@ public class Deposit : BaseIdEntity
     /// </summary>
     public DictionaryValue Type { get; set; } = null!;
     
+    public string TypeId { get; set; }
+    
     /// <summary>
     ///     Навигационное св-во заказов.
     /// </summary>

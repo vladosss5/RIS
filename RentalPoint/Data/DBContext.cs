@@ -17,86 +17,89 @@ public class DBContext : DbContext
     public DBContext(DbContextOptions<DBContext> options) : base(options)
     {
     }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        var currentDirectory = Directory.GetCurrentDirectory();
+        var basePath = currentDirectory.Replace(@"\RentalPoint\bin\Debug\net8.0", "");
+        var dbPath = Path.Combine(basePath, "Data", "db.sqlite");
+
+        optionsBuilder.UseSqlite($"Data Source={dbPath};");
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configure Client entity
+        // Клиент
         modelBuilder.Entity<Client>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.FName).IsRequired();
             entity.Property(e => e.SName).IsRequired();
             entity.Property(e => e.PhoneNumber).IsRequired();
         });
 
-        // Configure Deposit entity
+        // Депозит
         modelBuilder.Entity<Deposit>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.DocumentNumber).IsRequired();
                 
             entity.HasOne(d => d.Type)
                 .WithMany()
-                .HasForeignKey(d => d.Type.Id)
+                .HasForeignKey(d => d.TypeId) // Используем явный внешний ключ
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // Configure Dictionary entity
+        // Справочник
         modelBuilder.Entity<Dictionary>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Type).IsRequired();
         });
 
-        // Configure DictionaryValue entity
+        // Значение справочника
         modelBuilder.Entity<DictionaryValue>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Value).IsRequired();
                 
             entity.HasOne(dv => dv.Dictionary)
                 .WithMany(d => d.DictionaryValues)
-                .HasForeignKey(dv => dv.Dictionary.Id)
+                .HasForeignKey(dv => dv.DictionaryId) // Добавьте DictionaryId в DictionaryValue
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // Configure Inventory entity
+        // Инвентарь
         modelBuilder.Entity<Inventory>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.PricePerHour).HasColumnType("decimal(18,2)");
                 
             entity.HasOne(i => i.Type)
                 .WithMany()
-                .HasForeignKey(i => i.Type.Id)
+                .HasForeignKey(i => i.TypeId) // Используем явный внешний ключ
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // Configure Order entity
+        // Заказ
         modelBuilder.Entity<Order>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 
             entity.HasOne(o => o.Client)
                 .WithMany(c => c.OrderLinks)
-                .HasForeignKey(o => o.Client.Id)
+                .HasForeignKey(o => o.ClientId) // Используем явный внешний ключ
                 .OnDelete(DeleteBehavior.SetNull);
                 
             entity.HasOne(o => o.Status)
                 .WithMany()
-                .HasForeignKey(o => o.Status.Id)
+                .HasForeignKey(o => o.StatusId) // Используем явный внешний ключ
                 .OnDelete(DeleteBehavior.Restrict);
                 
             entity.HasOne(o => o.Deposit)
                 .WithMany(d => d.OrderLinks)
-                .HasForeignKey(o => o.Deposit.Id)
+                .HasForeignKey(o => o.DepositId) // Используем явный внешний ключ
                 .OnDelete(DeleteBehavior.SetNull);
         });
     }

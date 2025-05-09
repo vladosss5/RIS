@@ -20,13 +20,19 @@ public class Order : BaseIdEntity
     /// </summary>
     public Client? Client { get; set; }
     
+    public string? ClientId { get; set; }
+    
     /// <summary>
     ///     Статус.
     /// </summary>
     public DictionaryValue Status { get; set; } = null!;
     
+    public string StatusId { get; set; }
+    
     /// <summary>
     ///     Залог.
     /// </summary>
     public Deposit? Deposit { get; set; }
+    
+    public string? DepositId { get; set; }
 }
