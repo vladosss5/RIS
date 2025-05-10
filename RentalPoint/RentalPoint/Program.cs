@@ -1,21 +1,43 @@
-﻿using Avalonia;
-using System;
+﻿using System.IO;
+using Microsoft.Extensions.Configuration;
+using Services.Implementations;
+using Services.Interfaces;
 
 namespace RentalPoint;
 
-class Program
-{
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+using Avalonia;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
+internal class Program
+{
+    public static IServiceProvider? ServiceProvider { get; private set; }
+
+    [STAThread]
+    public static void Main(string[] args)
+    {
+        var services = new ServiceCollection();
+        ConfigureServices(services);
+        ServiceProvider = services.BuildServiceProvider();
+
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    }
+
+    private static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .WithInterFont()
             .LogToTrace();
+
+    private static void ConfigureServices(IServiceCollection services)
+    {
+        services.AddTransient<MainWindow>();
+        services.AddTransient<AuthorizationWindow>();
+        
+        services.AddSingleton<IAuthService, AuthService>();
+        
+        services.AddSingleton<IConfiguration>(_ => new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build());
+    }
 }
