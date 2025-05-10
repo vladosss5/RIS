@@ -1,9 +1,8 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace RentalPoint;
+namespace App;
 
 public partial class App : Application
 {
@@ -16,8 +15,9 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = Program.ServiceProvider!.GetRequiredService<AuthorizationWindow>();
+            desktop.MainWindow = new MainWindow();
         }
+
         base.OnFrameworkInitializationCompleted();
     }
 }

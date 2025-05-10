@@ -21,7 +21,7 @@ public class DBContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
-        var basePath = currentDirectory.Replace(@"\RentalPoint\bin\Debug\net8.0", "");
+        var basePath = currentDirectory.Replace(@"\RP.View\bin\Debug\net8.0", "");
         var dbPath = Path.Combine(basePath, "Data", "db.sqlite");
 
         optionsBuilder.UseSqlite($"Data Source={dbPath};");
