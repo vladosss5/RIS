@@ -1,21 +1,22 @@
 ﻿using Avalonia;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace App;
 
-class Program
+public static class Program
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args) 
+        => BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
 
-    // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace();
+            .LogToTrace()
+            .With<Win32PlatformOptions>(o => 
+            {
+                o.RenderingMode = new[] { Win32RenderingMode.Direct3D11 };
+                o.AllowEglInitialization = true;
+            });
 }
