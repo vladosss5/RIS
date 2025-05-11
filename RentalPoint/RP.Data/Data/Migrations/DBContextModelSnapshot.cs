@@ -17,7 +17,7 @@ namespace Data.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.15");
 
-            modelBuilder.Entity("Core.DBModels.Client", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Client", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -42,7 +42,7 @@ namespace Data.Data.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Deposit", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Deposit", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -62,7 +62,7 @@ namespace Data.Data.Migrations
                     b.ToTable("Deposits");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Dictionary", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Dictionary", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -76,7 +76,7 @@ namespace Data.Data.Migrations
                     b.ToTable("Dictionaries");
                 });
 
-            modelBuilder.Entity("Core.DBModels.DictionaryValue", b =>
+            modelBuilder.Entity("RP.Core.DBModels.DictionaryValue", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -96,7 +96,7 @@ namespace Data.Data.Migrations
                     b.ToTable("DictionaryValues");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Inventory", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Inventory", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -119,7 +119,7 @@ namespace Data.Data.Migrations
                     b.ToTable("Inventories");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Order", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Order", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -151,9 +151,9 @@ namespace Data.Data.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Deposit", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Deposit", b =>
                 {
-                    b.HasOne("Core.DBModels.DictionaryValue", "Type")
+                    b.HasOne("RP.Core.DBModels.DictionaryValue", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -162,9 +162,9 @@ namespace Data.Data.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Core.DBModels.DictionaryValue", b =>
+            modelBuilder.Entity("RP.Core.DBModels.DictionaryValue", b =>
                 {
-                    b.HasOne("Core.DBModels.Dictionary", "Dictionary")
+                    b.HasOne("RP.Core.DBModels.Dictionary", "Dictionary")
                         .WithMany("DictionaryValues")
                         .HasForeignKey("DictionaryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -173,9 +173,9 @@ namespace Data.Data.Migrations
                     b.Navigation("Dictionary");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Inventory", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Inventory", b =>
                 {
-                    b.HasOne("Core.DBModels.DictionaryValue", "Type")
+                    b.HasOne("RP.Core.DBModels.DictionaryValue", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -184,19 +184,19 @@ namespace Data.Data.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Order", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Order", b =>
                 {
-                    b.HasOne("Core.DBModels.Client", "Client")
+                    b.HasOne("RP.Core.DBModels.Client", "Client")
                         .WithMany("OrderLinks")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Core.DBModels.Deposit", "Deposit")
+                    b.HasOne("RP.Core.DBModels.Deposit", "Deposit")
                         .WithMany("OrderLinks")
                         .HasForeignKey("DepositId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Core.DBModels.DictionaryValue", "Status")
+                    b.HasOne("RP.Core.DBModels.DictionaryValue", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -209,17 +209,17 @@ namespace Data.Data.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Client", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Client", b =>
                 {
                     b.Navigation("OrderLinks");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Deposit", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Deposit", b =>
                 {
                     b.Navigation("OrderLinks");
                 });
 
-            modelBuilder.Entity("Core.DBModels.Dictionary", b =>
+            modelBuilder.Entity("RP.Core.DBModels.Dictionary", b =>
                 {
                     b.Navigation("DictionaryValues");
                 });

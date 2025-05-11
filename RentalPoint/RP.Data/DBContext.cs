@@ -22,9 +22,9 @@ public class DBContext : DbContext
     {
         var currentDirectory = Directory.GetCurrentDirectory();
         var basePath = currentDirectory.Replace(@"\RP.View\bin\Debug\net8.0", "");
-        var dbPath = Path.Combine(basePath, "Data", "db.sqlite");
+        var dbPath = Path.Combine(basePath, "RP.Data", "db.sqlite");
 
-        optionsBuilder.UseSqlite($"Data Source={dbPath};");
+        optionsBuilder.UseSqlite($"RP.Data Source={dbPath};");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
