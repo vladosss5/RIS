@@ -20,5 +20,18 @@ public class Inventory : BaseIdEntity
     /// </summary>
     public DictionaryValue Type { get; set; } = null!;
     
+    /// <summary>
+    ///     Идентификатор типа.
+    /// </summary>
     public string TypeId { get; set; }
+    
+    /// <summary>
+    ///     Статус.
+    /// </summary>
+    public DictionaryValue Status { get; set; } = null!;
+    
+    /// <summary>
+    ///     Идентификатор статуса.
+    /// </summary>
+    public string StatusId { get; set; }
 }
