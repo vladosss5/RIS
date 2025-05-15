@@ -1,14 +1,15 @@
 using Core.DBModels;
 using Data;
+using Microsoft.EntityFrameworkCore;
 using RP.Application.Interfaces;
 
 namespace RP.Application.Services;
 
 public class InventoryService : IInventoryService
 {
-    private readonly DbContext _context;
+    private readonly DataContext _context;
 
-    public InventoryService(DbContext context)
+    public InventoryService(DataContext context)
     {
         _context = context;
     }

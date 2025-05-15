@@ -34,4 +34,9 @@ public class Inventory : BaseIdEntity
     ///     Идентификатор статуса.
     /// </summary>
     public string StatusId { get; set; }
+    
+    /// <summary>
+    ///     Коллекция связей с заказом.
+    /// </summary>
+    public ICollection<OrderInventories> OrderInventories { get; set; } = new List<OrderInventories>();
 }

@@ -6,17 +6,17 @@ namespace Data;
 /// <summary>
 ///     Контекст БД.
 /// </summary>
-public class DbContext : Microsoft.EntityFrameworkCore.DbContext
+public class DataContext : DbContext
 {
     /// <summary>
     ///     Конструктор.
     /// </summary>
-    public DbContext() { }
+    public DataContext() { }
     
     /// <summary>
     ///     Конструктор с опциями.
     /// </summary>
-    public DbContext(DbContextOptions<DbContext> options) : base(options)
+    public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
     }
     
@@ -38,6 +38,9 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
     /// <inheritdoc cref="Order"/>
     public DbSet<Order> Orders { get; set; }
     
+    /// <inheritdoc cref="OrderInventories"/>
+    public DbSet<OrderInventories> OrderInventories { get; set; }
+    
     /// <summary>
     ///     Конфигурация контекста для работы с БД.
     /// </summary>
@@ -56,51 +59,52 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Клиент
+        // Конфигурация Client
         modelBuilder.Entity<Client>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.FName).IsRequired();
-            entity.Property(e => e.SName).IsRequired();
-            entity.Property(e => e.PhoneNumber).IsRequired();
+            entity.Property(e => e.FName).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.SName).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(20);
         });
 
-        // Депозит
+        // Конфигурация Deposit
         modelBuilder.Entity<Deposit>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.DocumentNumber).IsRequired();
-                
+            entity.Property(e => e.DocumentNumber).IsRequired().HasMaxLength(50);
+            
             entity.HasOne(d => d.Type)
                 .WithMany()
                 .HasForeignKey(d => d.TypeId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // Справочник
+        // Конфигурация Dictionary
         modelBuilder.Entity<Dictionary>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Type).IsRequired();
+            entity.Property(e => e.Type).IsRequired().HasMaxLength(100);
+            entity.HasIndex(e => e.Type).IsUnique();
         });
 
-        // Значение справочника
+        // Конфигурация DictionaryValue
         modelBuilder.Entity<DictionaryValue>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Value).IsRequired();
-                
+            entity.Property(e => e.Value).IsRequired().HasMaxLength(200);
+            
             entity.HasOne(dv => dv.Dictionary)
                 .WithMany(d => d.DictionaryValues)
                 .HasForeignKey(dv => dv.DictionaryId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // Инвентарь
+        // Конфигурация Inventory
         modelBuilder.Entity<Inventory>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Name).IsRequired();
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
             entity.Property(e => e.PricePerHour).HasColumnType("decimal(18,2)");
             
             entity.HasOne(i => i.Type)
@@ -114,11 +118,13 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // Заказ
+        // Конфигурация Order
         modelBuilder.Entity<Order>(entity =>
         {
             entity.HasKey(e => e.Id);
-                
+            entity.Property(e => e.StartDate).IsRequired();
+            entity.Property(e => e.FullPrice).HasColumnType("decimal(18,2)");
+            
             entity.HasOne(o => o.Client)
                 .WithMany(c => c.OrderLinks)
                 .HasForeignKey(o => o.ClientId)
@@ -133,6 +139,24 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
                 .WithMany(d => d.OrderLinks)
                 .HasForeignKey(o => o.DepositId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // Конфигурация OrderInventories (новая связующая таблица)
+        modelBuilder.Entity<OrderInventories>(entity =>
+        {
+            entity.HasKey(oi => new { oi.OrderId, oi.InventoryId });
+            
+            entity.Property(oi => oi.ReturnDateTime).IsRequired();
+            
+            entity.HasOne(oi => oi.Order)
+                .WithMany(o => o.OrderInventories)
+                .HasForeignKey(oi => oi.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+                
+            entity.HasOne(oi => oi.Inventory)
+                .WithMany(i => i.OrderInventories)
+                .HasForeignKey(oi => oi.InventoryId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

@@ -9,9 +9,9 @@ namespace RP.Application.Services;
 /// </summary>
 public class ClientService : IClientService
 {
-    private readonly DbContext _context;
+    private readonly DataContext _context;
 
-    public ClientService(DbContext context)
+    public ClientService(DataContext context)
     {
         _context = context;
     }

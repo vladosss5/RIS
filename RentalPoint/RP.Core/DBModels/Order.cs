@@ -27,6 +27,9 @@ public class Order : BaseIdEntity
     /// </summary>
     public DictionaryValue Status { get; set; } = null!;
     
+    /// <summary>
+    ///     Идентификатор статуса.
+    /// </summary>
     public string StatusId { get; set; }
     
     /// <summary>
@@ -34,5 +37,13 @@ public class Order : BaseIdEntity
     /// </summary>
     public Deposit? Deposit { get; set; }
     
+    /// <summary>
+    ///     Идентификатор залога.
+    /// </summary>
     public string? DepositId { get; set; }
+
+    /// <summary>
+    ///     Коллекция связей с инвентарём.
+    /// </summary>
+    public ICollection<OrderInventories> OrderInventories { get; set; } = new List<OrderInventories>();
 }

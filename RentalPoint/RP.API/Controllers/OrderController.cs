@@ -1,38 +1,61 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RP.API.Dtos.Order;
+using RP.API.Mapping;
+using RP.Application.Interfaces;
 
 namespace RP.API.Controllers;
 
-[Route("api/order")]
 [ApiController]
-public class OrderController : ControllerBase
+[Route("api/orders")]
+public class OrdersController : ControllerBase
 {
-    public OrderController()
+    private readonly IOrderService _orderService;
+    private readonly OrderMapper _orderMapper;
+
+    public OrdersController(
+        IOrderService orderService, 
+        OrderMapper orderMapper)
     {
-        
+        _orderService = orderService;
+        _orderMapper = orderMapper;
     }
 
-    [HttpGet("table")]
-    public async Task<IActionResult> GetAllOrders()
-    {
-        return Ok();
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetOrderById(string id)
-    {
-        return Ok();
-    }
-
+    /// <summary>
+    /// Создать новый заказ на прокат
+    /// </summary>
     [HttpPost]
-    public async Task<IActionResult> CreateOrder()
+    public async Task<ActionResult<OrderResponseDto>> CreateOrder([FromBody] OrderCreateDto dto)
     {
-        return Created();
+        var order = _orderMapper.MapToDomain(dto);
+        var createdOrder = await _orderService.CreateOrderAsync(order);
+        var resultDto = _orderMapper.MapToDto(createdOrder);
+        
+        return CreatedAtAction(
+            nameof(GetOrderById), 
+            new { id = resultDto.Id }, 
+            resultDto);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteOrderById(string id)
+    /// <summary>
+    /// Получить заказ по ID
+    /// </summary>
+    [HttpGet("{id}")]
+    public async Task<ActionResult<OrderResponseDto>> GetOrderById(string id)
     {
-        return NoContent();
+        var order = await _orderService.GetOrderByIdAsync(id);
+        if (order == null)
+            return NotFound();
+            
+        return _orderMapper.MapToDto(order);
+    }
+
+    /// <summary>
+    /// Завершить заказ и рассчитать стоимость
+    /// </summary>
+    [HttpPatch("{id}/complete")]
+    public async Task<ActionResult<OrderCompletionResultDto>> CompleteOrder(string id)
+    {
+        var result = await _orderService.CompleteOrderAsync(id);
+        return Ok(result);
     }
 }

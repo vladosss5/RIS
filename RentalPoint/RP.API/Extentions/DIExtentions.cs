@@ -20,7 +20,7 @@ public static class DIExtentions
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        services.AddDbContext<DbContext>();
+        services.AddDbContext<DataContext>();
         
         services.AddScoped<ClientsMapper>();
 

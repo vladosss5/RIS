@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Data.Migrations
 {
-    [DbContext(typeof(DbContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20250515175809_AddStatusInInventory")]
     partial class AddStatusInInventory
     {

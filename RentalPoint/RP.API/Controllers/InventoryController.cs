@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RP.API.Dtos.Inventory;
 using RP.API.Dtos.Satatuses;
-using DbContext = Data.DbContext;
 
 namespace RP.API.Controllers;
 
@@ -12,9 +11,9 @@ namespace RP.API.Controllers;
 [Route("api/inventory")]
 public class InventoryController : ControllerBase
 {
-    private readonly DbContext _context;
+    private readonly DataContext _context;
 
-    public InventoryController(DbContext context)
+    public InventoryController(DataContext context)
     {
         _context = context;
     }
