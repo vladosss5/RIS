@@ -1,6 +1,9 @@
 using Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RP.API.Mapping;
+using RP.Application.Interfaces;
+using RP.Application.Services;
 
 namespace RP.Application.Extentions;
 
@@ -18,6 +21,10 @@ public static class DIExtentions
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<DbContext>();
+        
+        services.AddScoped<ClientsMapper>();
+
+        services.AddScoped<IClientService, ClientService>();
         
         return services;
     }
