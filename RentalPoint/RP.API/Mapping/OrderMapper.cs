@@ -10,8 +10,13 @@ public class OrderMapper
         return new Order
         {
             ClientId = dto.ClientId,
-            OrderInventories = dto.InventoryIds.Select(x => new OrderInventories{ InventoryId = x }).ToList(),
-            DepositId = dto.DepositId
+            StartDate = DateTime.UtcNow,
+            StatusId = "created",
+            OrderInventories = dto.InventoryItems.Select(item => new OrderInventories
+            {
+                InventoryId = item.InventoryId,
+                ReturnDateTime = DateTime.UtcNow.AddHours(item.Hours)
+            }).ToList()
         };
     }
 
@@ -20,10 +25,13 @@ public class OrderMapper
         return new OrderResponseDto
         {
             Id = order.Id,
-            StartDate = order.StartDate,
-            Status = order.Status.ToString(),
-            TotalPrice = order.FullPrice,
-            InventoryId = order.InventoryId
+            ClientId = order.ClientId,
+            Status = order.Status.Value,
+            Items = order.OrderInventories.Select(oi => new OrderItemDto
+            {
+                InventoryId = oi.InventoryId,
+                ReturnDate = oi.ReturnDateTime
+            }).ToList()
         };
     }
 }

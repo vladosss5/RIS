@@ -1,6 +1,10 @@
+using Core.DBModels;
+
 namespace RP.Application.Interfaces;
 
-public class IOrderService
+public interface IOrderService
 {
-    
+    Task<Order> CreateOrderAsync(Order order);
+    Task<Order?> GetOrderByIdAsync(string id);
+    Task ReturnInventoryAsync(string orderId, string inventoryId);
 }

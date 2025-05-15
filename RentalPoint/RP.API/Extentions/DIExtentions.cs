@@ -26,6 +26,10 @@ public static class DIExtentions
 
         services.AddScoped<IClientService, ClientService>();
         
+        services.AddScoped<IOrderService, OrderService>();
+        
+        services.AddScoped<OrderMapper>();
+        
         return services;
     }
 }
